@@ -4,3 +4,5 @@
 /fake/target/
 /jpa/target/
 /tester/target/
+*.iml
+.idea
