@@ -1,0 +1,6 @@
+# Project exclude paths
+/api/target/
+/core/target/
+/fake/target/
+/jpa/target/
+/tester/target/

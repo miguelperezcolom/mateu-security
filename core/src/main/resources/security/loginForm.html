@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+
+        function login() {
+            ok = check(document.getElementById("login"));
+            ok &= check(document.getElementById("password"));
+
+            m = document.querySelector('#msg');
+            m.classList.add('is-hidden');
+
+            if (ok) {
+                axios.post('/zzz/private/authenticate', 'login=' + encodeURIComponent(document.querySelector('#login input').value) + '&password=' + encodeURIComponent(document.querySelector('#password input').value))
+                    .then(function (response) {
+                        if (response.data.valid) {
+                            location.reload();
+                        } else {
+                            m = document.querySelector('#msg');
+                            m.innerHTML = response.data.msg;
+                            m.classList.remove('is-hidden');
+                        }
+                    })
+                    .catch(function (error) {
+                        m = document.querySelector('#msg');
+                        m.innerHTML = error;
+                        m.classList.remove('is-hidden');
+                    });
+
+            }
+
+        }
+
+        function check(e) {
+            i = e.querySelector("input");
+            if (!i.value) {
+                i.classList.add("is-danger")
+
+                m = e.querySelector(".help");
+                m.innerHTML = 'Can not be empty';
+                m.classList.remove('is-hidden');
+
+                m = e.querySelector(".is-right");
+                m.classList.remove('is-hidden');
+                m.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
+
+                return false;
+            } else {
+                i.classList.remove("is-danger")
+                m = e.querySelector(".help");
+                m.classList.add('is-hidden');
+
+                m = e.querySelector(".is-right");
+                m.classList.remove('is-hidden');
+                m.innerHTML = '<i class="fas fa-check"></i>';
+            }
+            return true;
+        }
+
+    </script>
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">
+            ${welcomeMessage!"Welcome"}
+        </h1>
+        <p class="subtitle">
+            ${welcomeInfo!"Please login"}
+        </p>
+
+
+        <form>
+            <div class="field" id="login">
+                <p class="control has-icons-left has-icons-right">
+                    <input class="input" type="email" placeholder="Email">
+                    <span class="icon is-small is-left">
+      <i class="fas fa-user"></i>
+    </span>
+                    <span class="icon is-small is-right is-hidden">
+      <i class="fas fa-check"></i>
+    </span>
+                </p>
+                <p class="help is-danger is-hidden">This email is invalid</p>
+            </div>
+            <div class="field" id="password">
+                <p class="control has-icons-left has-icons-right">
+                    <input class="input" type="password" placeholder="Password">
+                    <span class="icon is-small is-left">
+      <i class="fas fa-lock"></i>
+    </span>
+                    <span class="icon is-small is-right is-hidden">
+      <i class="fas fa-check"></i>
+    </span>
+                </p>
+                <p class="help is-danger is-hidden">This email is invalid</p>
+            </div>
+
+
+
+            <div class="field is-grouped">
+                <p class="control">
+                    <a class="button is-primary" href="javascript:login();">
+                        Submit
+                    </a>
+                </p>
+                <p class="control">
+                    <a class="button is-light" href="javascript:window.history.back();">
+                        Cancel
+                    </a>
+                </p>
+            </div>
+            <p id="msg" class="help is-danger is-hidden">This email is invalid</p>
+
+        </form>
+
+    </div>
+</section>
+</body>
+</html>
