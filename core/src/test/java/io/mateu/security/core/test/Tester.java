@@ -44,6 +44,11 @@ public class Tester {
 
 
     public static void main(String[] args) throws Exception {
+
+        System.setProperty("oauth.github.client_id", "aaa");
+        System.setProperty("oauth.github.client_secret", "aaa");
+
+
         int port = 8080; //ExampleUtil.getPort(args, "jetty.http.port", 8080);
         Server server = createServer(port);
         server.start();

@@ -6,10 +6,23 @@
     <title>Hello Bulma!</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+    <style>
+        .fondo {
+            background-color: transparent;
+            background-image: url(https://raw.githubusercontent.com/miguelperezcolom/mateu-mdd/master/mdd-addon/src/main/resources/VAADIN/themes/mateumddtheme/img/bg.jpg);
+            background-size: cover;
+            text-align: center;
+        }
+
+        .fondo * {
+            color: white;
+        }
+    </style>
 </head>
 <body>
-<section class="section">
-    <div class="container">
+<section class="hero is-fullheight fondo">
+    <a class="hero-body" href="..">
+        <div class="container" style="max-width: 1024px;">
         <h1 class="title">
             ${byeMessage!"Sorry you left us"}
         </h1>
@@ -17,6 +30,7 @@
             ${byeInfo!"Hope to see you soon ;)"}
         </p>
     </div>
+    </a>
 </section>
 </body>
 </html>

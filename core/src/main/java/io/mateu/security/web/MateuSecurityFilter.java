@@ -197,6 +197,15 @@ public class MateuSecurityFilter implements Filter {
 
         m.put("welcomeMessage", System.getProperty("welcome.message", "Welcome to " + "<here your app name>" + "."));
         m.put("welcomeInfo", System.getProperty("welcome.info", "Here your welcome info"));
+        m.put("hasLogo", System.getProperty("logo") != null);
+        m.put("logo", System.getProperty("logo"));
+
+        m.put("login", !"false".equalsIgnoreCase(System.getProperty("oauthonly")));
+        m.put("register", "true".equalsIgnoreCase(System.getProperty("newusersallowed")));
+
+        m.put("github", System.getProperty("oauth.github.client_id") != null && System.getProperty("oauth.github.client_secret") != null);
+        m.put("google", System.getProperty("oauth.google.client_id") != null && System.getProperty("oauth.google.client_secret") != null);
+        m.put("microsoft", System.getProperty("oauth.micorsoft.client_id") != null && System.getProperty("oauth.microsoft.client_secret") != null);
 
         return m;
     }

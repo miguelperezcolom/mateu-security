@@ -64,63 +64,181 @@
         }
 
     </script>
+    <style>
+        .fondo {
+            background-color: transparent;
+            background-image: url(https://raw.githubusercontent.com/miguelperezcolom/mateu-mdd/master/mdd-addon/src/main/resources/VAADIN/themes/mateumddtheme/img/bg.jpg);
+            background-size: cover;
+        }
+
+        .info,.form {
+            height: 450px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .info {
+            background-color: rgba(255, 255, 255, .2) !important;
+            text-align: center;
+            color: white;
+        }
+
+        .info * {
+            color: white;
+        }
+
+        .form {
+            padding: 28px;
+
+            background-color: #fff;
+            justify-content: center;
+        }
+
+
+        @media only screen and (min-width: 1024px) {
+
+            .info,.form {
+                box-shadow: 0 2px 3px rgba(0,0,0,.2);
+            }
+
+
+            .info {
+                border-radius: 5px 0 0 5px;
+            }
+
+            .form {
+                border-radius: 0 5px 5px 0;
+            }
+
+        }
+
+        @media only screen and (max-width: 1023px) {
+            .hero.is-fullheight .hero-body, .hero.is-fullheight-with-navbar .hero-body, .hero.is-halfheight .hero-body {
+                align-items: inherit;
+            }
+            .hero-body {
+                padding: 0px;
+            }
+        }
+
+
+
+
+    </style>
 </head>
 <body>
-<section class="section">
-    <div class="container">
-        <h1 class="title">
-            ${welcomeMessage!"Welcome"}
-        </h1>
-        <p class="subtitle">
-            ${welcomeInfo!"Please login"}
-        </p>
+<section class="hero is-fullheight fondo">
+    <div class="hero-body">
+        <div class="container" style="max-width: 1024px;">
+
+            <div class="columns is-desktop">
+                <div class="column is-centered loginilayoutizda info is-three-fifths-desktop" style="align-items: center; display: flex;">
+
+                    <div style="width: 70%; margin: 0 auto; text-align: center;">
+                        <#if hasLogo>
+                            <img src="${logo!''}">
+                        </#if>
+
+                        <h1 class="title">
+                            ${welcomeMessage!"Welcome"}
+                        </h1>
+                        <p class="subtitle">
+                            ${welcomeInfo!"Please login"}
+                        </p>
+                    </div>
+
+                </div>
+                <div class="column is-centered loginilayoutdcha form">
+
+                    <form style="width: 70%; margin: 0 auto;">
+
+                        <#if login>
+                            <p class="subtitle">Sign in</p>
+                            <div class="field" id="login">
 
 
-        <form>
-            <div class="field" id="login">
-                <p class="control has-icons-left has-icons-right">
-                    <input class="input" type="email" placeholder="Email">
-                    <span class="icon is-small is-left">
-      <i class="fas fa-user"></i>
-    </span>
-                    <span class="icon is-small is-right is-hidden">
-      <i class="fas fa-check"></i>
-    </span>
-                </p>
-                <p class="help is-danger is-hidden">This email is invalid</p>
+                                <p class="control has-icons-left has-icons-right">
+                                    <input class="input" type="text" placeholder="Login">
+                                    <span class="icon is-small is-left">
+          <i class="fas fa-user"></i>
+        </span>
+                                    <span class="icon is-small is-right is-hidden">
+          <i class="fas fa-check"></i>
+        </span>
+                                </p>
+                                <p class="help is-danger is-hidden">This email is invalid</p>
+                            </div>
+                            <div class="field" id="password">
+                                <p class="control has-icons-left has-icons-right">
+                                    <input class="input" type="password" placeholder="Password">
+                                    <span class="icon is-small is-left">
+          <i class="fas fa-lock"></i>
+        </span>
+                                    <span class="icon is-small is-right is-hidden">
+          <i class="fas fa-check"></i>
+        </span>
+                                </p>
+                                <p class="help is-danger is-hidden">This email is invalid</p>
+                            </div>
+                        </#if>
+
+
+                        <div class="buttons">
+                            <#if login>
+                                <a class="button is-primary is-fullwidth" href="javascript:login();">
+                                    Submit
+                                </a>
+
+                                <p id="msg" class="help is-danger is-hidden">This email is invalid</p>
+
+
+                                <a class="button is-light is-fullwidth" href="javascript:window.history.back();">
+                                    Remember password
+                                </a>
+
+                                <a class="button is-light is-fullwidth" href="javascript:window.history.back();">
+                                    Register
+                                </a>
+                            </#if>
+
+                            <#if google>
+                                <a class="button is-fullwidth" href="javascript:login();">
+                                    <span class="icon">
+                                      <i class="fab fa-google"></i>
+                                    </span>
+                                    <span>Sign in with Google</span>
+                                </a>
+                            </#if>
+
+                            <#if microsoft>
+                                <a class="button is-fullwidth" href="javascript:login();">
+                                    <span class="icon">
+                                      <i class="fab fa-microsoft"></i>
+                                    </span>
+                                    <span>Sign in with Microsoft</span>
+                                </a>
+                            </#if>
+
+                            <#if github>
+                                <a class="button is-fullwidth" href="javascript:login();">
+                                    <span class="icon">
+                                      <i class="fab fa-github"></i>
+                                    </span>
+                                    <span>Sign in with Github</span>
+                                </a>
+                            </#if>
+
+                        </div>
+
+                    </form>
+
+                </div>
             </div>
-            <div class="field" id="password">
-                <p class="control has-icons-left has-icons-right">
-                    <input class="input" type="password" placeholder="Password">
-                    <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-                    <span class="icon is-small is-right is-hidden">
-      <i class="fas fa-check"></i>
-    </span>
-                </p>
-                <p class="help is-danger is-hidden">This email is invalid</p>
-            </div>
 
-
-
-            <div class="field is-grouped">
-                <p class="control">
-                    <a class="button is-primary" href="javascript:login();">
-                        Submit
-                    </a>
-                </p>
-                <p class="control">
-                    <a class="button is-light" href="javascript:window.history.back();">
-                        Cancel
-                    </a>
-                </p>
-            </div>
-            <p id="msg" class="help is-danger is-hidden">This email is invalid</p>
-
-        </form>
-
+        </div>
     </div>
 </section>
+</div>
 </body>
 </html>
