@@ -1,6 +1,5 @@
 package io.mateu.security.fake;
 
-import io.mateu.mdd.shared.interfaces.IResource;
 import io.mateu.mdd.shared.interfaces.UserPrincipal;
 import io.mateu.security.MateuSecurityManager;
 import io.mateu.security.Private;

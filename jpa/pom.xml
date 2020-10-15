@@ -23,7 +23,7 @@
 
         <dependency>
             <groupId>io.mateu</groupId>
-            <artifactId>security-api</artifactId>
+            <artifactId>security-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 

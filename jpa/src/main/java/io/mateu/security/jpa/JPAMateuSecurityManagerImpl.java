@@ -66,7 +66,7 @@ public class JPAMateuSecurityManagerImpl implements MateuSecurityManager {
             @Override
             public URL getPhoto() {
                 try {
-                    return u.getPhoto() != null?new URL(u.getPhoto().toFileLocator().getUrl()):null;
+                    return u.getPhoto() != null?new URL(u.getAvatar().toFileLocator().getUrl()):null;
                 } catch (Exception e) {
                     e.printStackTrace();
                     return null;
