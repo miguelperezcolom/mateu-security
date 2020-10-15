@@ -1,18 +1,15 @@
-package io.mateu.security.oauth;
+package io.mateu.security.jpa;
 
 import com.google.common.base.Strings;
 import com.vaadin.server.Page;
-import io.mateu.mdd.shared.data.URLResource;
-import io.mateu.mdd.shared.interfaces.IResource;
 import io.mateu.mdd.shared.interfaces.UserPrincipal;
+import io.mateu.security.MateuSecurityManager;
 import io.mateu.util.Helper;
 import okhttp3.*;
 
-import javax.persistence.EntityManager;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -21,6 +18,9 @@ public class OAuthHelper {
 
 
     public static UserPrincipal getUserDataFromMicrosoftCode(String code) throws Throwable {
+
+        MateuSecurityManager securityManager = Helper.getImpl(MateuSecurityManager.class);
+
         UserPrincipal ud = null;
 
         /*
@@ -37,8 +37,8 @@ grant_type=authorization_code
 
         if (!Strings.isNullOrEmpty(code)) {
 
-            String apiKey = System.getProperty("oauth.microsoft.client_id");
-            String apiSecret = System.getProperty("oauth.microsoft.client_secret");
+            String apiKey = securityManager.getMicrosoftClientId();
+            String apiSecret = securityManager.getMicrosoftClientSecret();
 
             String access_token = null;
 
@@ -212,6 +212,9 @@ grant_type=authorization_code
 
 
     public static UserPrincipal getUserDataFromGoogleCode(String code) throws Throwable {
+
+        MateuSecurityManager securityManager = Helper.getImpl(MateuSecurityManager.class);
+
         UserPrincipal ud = null;
 
         /*
@@ -228,8 +231,8 @@ grant_type=authorization_code
 
         if (!Strings.isNullOrEmpty(code)) {
 
-            String apiKey = System.getProperty("oauth.google.client_id");
-            String apiSecret = System.getProperty("oauth.google.client_secret");
+            String apiKey = securityManager.getGoogleClientId();
+            String apiSecret = securityManager.getGoogleClientSecret();
 
             String access_token = null;
 
@@ -403,12 +406,15 @@ grant_type=authorization_code
 
 
     public static UserPrincipal getUserDataFromGitHubCode(String code) throws Throwable {
+
+        MateuSecurityManager securityManager = Helper.getImpl(MateuSecurityManager.class);
+
         UserPrincipal ud = null;
 
         if (!Strings.isNullOrEmpty(code)) {
 
-            String apiKey = System.getProperty("oauth.github.client_id");
-            String apiSecret = System.getProperty("oauth.github.client_secret");
+            String apiKey = securityManager.getGithubClientId();
+            String apiSecret = securityManager.getGithubClientSecret();
 
             String access_token = null;
 

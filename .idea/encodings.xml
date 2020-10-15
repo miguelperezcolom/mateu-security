@@ -6,7 +6,10 @@
     <file url="file://$PROJECT_DIR$/core/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/fake/src/main/java" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/fake/src/main/resources" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/htpasswd/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/htpasswd/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/jpa/src/main/java" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/jpa/src/main/resources" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/src/main/java" charset="UTF-8" />
   </component>
 </project>

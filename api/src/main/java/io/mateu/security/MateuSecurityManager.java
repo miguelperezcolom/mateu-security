@@ -13,19 +13,51 @@ public interface MateuSecurityManager {
 
     UserPrincipal getPrincipal(HttpSession httpSession);
 
-    void set(HttpSession httpSession, String name);
+    void set(HttpSession httpSession, String name) throws Throwable;
 
     boolean check(HttpSession httpSession, Private annotation);
 
     boolean isProfileAvailable(HttpSession httpSession);
 
-    Object getProfile(HttpSession httpSession);
+    String recoverPassword(HttpSession httpSession, String nameOrEmail) throws Throwable;
 
-    String recoverPassword(HttpSession httpSession, String nameOrEmail);
+    UserPrincipal getUserDataFromGitHubCode(HttpServletRequest req) throws Throwable;
 
-    UserPrincipal getUserDataFromGitHubCode(HttpServletRequest req);
+    UserPrincipal getUserDataFromGoogleCode(HttpServletRequest req) throws Throwable;
 
-    UserPrincipal getUserDataFromGoogleCode(HttpServletRequest req);
+    UserPrincipal getUserDataFromMicrosoftCode(HttpServletRequest req) throws Throwable;
 
-    UserPrincipal getUserDataFromMicrosoftCode(HttpServletRequest req);
+    String getWelcomeMessage();
+
+    String getWelcomeInfo();
+
+    boolean hasFavicon();
+
+    String getFavicon();
+
+    String getByeMessage();
+
+    String getByeInfo();
+
+    boolean hasLogo();
+
+    String getLogo();
+
+    boolean isLoginSupported();
+
+    String getRegistrationUrl();
+
+    String getForgotternPasswordUrl();
+
+    String getGithubClientId();
+
+    String getGithubClientSecret();
+
+    String getGoogleClientId();
+
+    String getGoogleClientSecret();
+
+    String getMicrosoftClientId();
+
+    String getMicrosoftClientSecret();
 }

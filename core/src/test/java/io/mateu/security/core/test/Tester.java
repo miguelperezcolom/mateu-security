@@ -48,7 +48,14 @@ public class Tester {
         System.setProperty("oauth.github.client_id", "aaa");
         System.setProperty("oauth.github.client_secret", "aaa");
 
+        System.setProperty("oauth.google.client_id", "aaa");
+        System.setProperty("oauth.google.client_secret", "aaa");
+
+        System.setProperty("oauth.microsoft.client_id", "aaa");
+        System.setProperty("oauth.microsoft.client_secret", "aaa");
+
         System.setProperty("registrationUrl", "aaa");
+        //System.setProperty("passwordForgottenUrl", "bbbb");
 
 
         int port = 8080; //ExampleUtil.getPort(args, "jetty.http.port", 8080);

@@ -1,23 +1,90 @@
-package io.mateu.security.fake;
+package io.mateu.security.htpasswd;
 
-import io.mateu.mdd.shared.interfaces.IResource;
+import com.google.common.base.Strings;
 import io.mateu.mdd.shared.interfaces.UserPrincipal;
 import io.mateu.security.MateuSecurityManager;
 import io.mateu.security.Private;
+import io.mateu.util.Helper;
+import io.mateu.util.SharedHelper;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.Crypt;
+import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.codec.digest.Md5Crypt;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+public class HtpasswdMateuSecurityImpl implements MateuSecurityManager {
 
-public class FakeMateuSecurityManagerImpl implements MateuSecurityManager {
+    private Map<String, String> htpasswd = new HashMap<>();
+
+    public HtpasswdMateuSecurityImpl() {
+        SharedHelper.loadProperties();
+        if (System.getProperty("htpasswd") != null) {
+            String r = null;
+            File f = new File(System.getProperty("htpasswd"));
+            if (f.exists()) r = Helper.leerFichero(System.getProperty("htpasswd"));
+            else {
+                InputStream s = getClass().getResourceAsStream(System.getProperty("htpasswd"));
+                if (s != null) r = Helper.leerInputStream(s, "utf-8");
+            }
+
+            if (r == null) {
+                System.out.println("" + System.getProperty("htpasswd") + " not found");
+            } else {
+                for (String l : r.split("\n")) if (!Strings.isNullOrEmpty(l) && !l.trim().startsWith("#")) {
+                    String[] ts = l.split(":");
+                    if (ts.length > 1) htpasswd.put(ts[0], ts[1]);
+                }
+            }
+        } else {
+            System.out.println("No htpasswd file provided. Please set htpasswd java property (e.g. java -Dhtpasswd=<path to htpasswd file> ...)");
+        }
+    }
+
 
     @Override
     public UserPrincipal validate(HttpSession httpSession, String login, String password) throws Throwable {
-        if (!"admin".equalsIgnoreCase(login)) throw new Exception("Invalid user");
-        if (!"1".equalsIgnoreCase(password)) throw new Exception("Invalid password");
+        if (!htpasswd.containsKey(login)) throw new Exception("Invalid user");
+        boolean authenticated = false;
+        String storedPwd = htpasswd.get(login);
+        final String passwd = new String(password);
+
+        // test Apache MD5 variant encrypted password
+        if (storedPwd.startsWith("$apr1$")) {
+            if (storedPwd.equals(Md5Crypt.apr1Crypt(passwd, storedPwd))) {
+                System.out.println("Apache MD5 encoded password matched for user '" + login + "'");
+                authenticated = true;
+            }
+        }
+        // test unsalted SHA password
+        else if (storedPwd.startsWith("{SHA}")) {
+            String passwd64 = Base64.encodeBase64String(DigestUtils.sha1(passwd));
+            if (storedPwd.substring("{SHA}".length()).equals(passwd64)) {
+                System.out.println("Unsalted SHA-1 encoded password matched for user '" + login + "'");
+                authenticated = true;
+            }
+        }
+        // test libc crypt() encoded password
+        else if (storedPwd.equals(Crypt.crypt(passwd, storedPwd))) {
+            System.out.println("Libc crypt encoded password matched for user '" + login + "'");
+            authenticated = true;
+        }
+        // test clear text
+        else if (storedPwd.equals(passwd)){
+            System.out.println("Clear text password matched for user '" + login + "'");
+            authenticated = true;
+        }
+
+        if (!authenticated) throw new Exception("Invalid password");
+
         return new UserPrincipal() {
             @Override
             public String getLogin() {
@@ -31,12 +98,12 @@ public class FakeMateuSecurityManagerImpl implements MateuSecurityManager {
 
             @Override
             public String getName() {
-                return "Mateu";
+                return login;
             }
 
             @Override
             public String getEmail() {
-                return "test@test.ss";
+                return "";
             }
 
             @Override
@@ -48,7 +115,7 @@ public class FakeMateuSecurityManagerImpl implements MateuSecurityManager {
 
     @Override
     public String getName(javax.servlet.http.HttpSession httpSession) {
-        return "Mateu";
+        return getPrincipal(httpSession).getName();
     }
 
     @Override
