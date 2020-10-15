@@ -48,6 +48,8 @@ public class Tester {
         System.setProperty("oauth.github.client_id", "aaa");
         System.setProperty("oauth.github.client_secret", "aaa");
 
+        System.setProperty("registrationUrl", "aaa");
+
 
         int port = 8080; //ExampleUtil.getPort(args, "jetty.http.port", 8080);
         Server server = createServer(port);

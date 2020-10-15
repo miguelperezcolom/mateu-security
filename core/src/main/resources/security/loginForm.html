@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Hello Bulma!</title>
+    <title>Hello!</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.0/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
@@ -197,13 +197,15 @@
                                     Remember password
                                 </a>
 
-                                <a class="button is-light is-fullwidth" href="javascript:window.history.back();">
-                                    Register
-                                </a>
+                                <#if hasRegistration>
+                                    <a class="button is-light is-fullwidth" href="${registrationUrl}">
+                                        Register
+                                    </a>
+                                </#if>
                             </#if>
 
                             <#if google>
-                                <a class="button is-fullwidth" href="javascript:login();">
+                                <a class="button is-fullwidth" href="${googleUrl}">
                                     <span class="icon">
                                       <i class="fab fa-google"></i>
                                     </span>
@@ -212,7 +214,7 @@
                             </#if>
 
                             <#if microsoft>
-                                <a class="button is-fullwidth" href="javascript:login();">
+                                <a class="button is-fullwidth" href="${microsoftUrl}">
                                     <span class="icon">
                                       <i class="fab fa-microsoft"></i>
                                     </span>
@@ -221,7 +223,7 @@
                             </#if>
 
                             <#if github>
-                                <a class="button is-fullwidth" href="javascript:login();">
+                                <a class="button is-fullwidth" href="${githubUrl}">
                                     <span class="icon">
                                       <i class="fab fa-github"></i>
                                     </span>

@@ -2,11 +2,12 @@ package io.mateu.security;
 
 import io.mateu.mdd.shared.interfaces.UserPrincipal;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public interface MateuSecurityManager {
 
-    boolean validate(HttpSession httpSession, String login, String password) throws Throwable;
+    UserPrincipal validate(HttpSession httpSession, String login, String password) throws Throwable;
 
     String getName(HttpSession httpSession);
 
@@ -22,4 +23,9 @@ public interface MateuSecurityManager {
 
     String recoverPassword(HttpSession httpSession, String nameOrEmail);
 
+    UserPrincipal getUserDataFromGitHubCode(HttpServletRequest req);
+
+    UserPrincipal getUserDataFromGoogleCode(HttpServletRequest req);
+
+    UserPrincipal getUserDataFromMicrosoftCode(HttpServletRequest req);
 }
