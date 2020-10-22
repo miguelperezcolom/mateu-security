@@ -20,7 +20,7 @@
             m.classList.add('is-hidden');
 
             if (ok) {
-                axios.post('/zzz/private/authenticate', 'login=' + encodeURIComponent(document.querySelector('#login input').value) + '&password=' + encodeURIComponent(document.querySelector('#password input').value))
+                axios.post('${baseUrl}authenticate', 'login=' + encodeURIComponent(document.querySelector('#login input').value) + '&password=' + encodeURIComponent(document.querySelector('#password input').value))
                     .then(function (response) {
                         if (response.data.valid) {
                             location.reload();

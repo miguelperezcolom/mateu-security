@@ -59,26 +59,40 @@ public class HtpasswdMateuSecurityImpl implements MateuSecurityManager {
 
         // test Apache MD5 variant encrypted password
         if (storedPwd.startsWith("$apr1$")) {
-            if (storedPwd.equals(Md5Crypt.apr1Crypt(passwd, storedPwd))) {
-                System.out.println("Apache MD5 encoded password matched for user '" + login + "'");
-                authenticated = true;
+            try {
+                if (storedPwd.equals(Md5Crypt.apr1Crypt(passwd, storedPwd))) {
+                    System.out.println("Apache MD5 encoded password matched for user '" + login + "'");
+                    authenticated = true;
+                }
+            } catch (Exception e) {
+
             }
         }
         // test unsalted SHA password
         else if (storedPwd.startsWith("{SHA}")) {
-            String passwd64 = Base64.encodeBase64String(DigestUtils.sha1(passwd));
-            if (storedPwd.substring("{SHA}".length()).equals(passwd64)) {
-                System.out.println("Unsalted SHA-1 encoded password matched for user '" + login + "'");
-                authenticated = true;
+            try {
+                String passwd64 = Base64.encodeBase64String(DigestUtils.sha1(passwd));
+                if (storedPwd.substring("{SHA}".length()).equals(passwd64)) {
+                    System.out.println("Unsalted SHA-1 encoded password matched for user '" + login + "'");
+                    authenticated = true;
+                }
+            } catch (Exception e) {
+
             }
         }
         // test libc crypt() encoded password
-        else if (storedPwd.equals(Crypt.crypt(passwd, storedPwd))) {
-            System.out.println("Libc crypt encoded password matched for user '" + login + "'");
-            authenticated = true;
+        if (!authenticated) {
+            try {
+                if (storedPwd.equals(Crypt.crypt(passwd, storedPwd))) {
+                    System.out.println("Libc crypt encoded password matched for user '" + login + "'");
+                    authenticated = true;
+                }
+            } catch (Exception e) {
+
+            }
         }
         // test clear text
-        else if (storedPwd.equals(passwd)){
+        if (!authenticated && storedPwd != null && storedPwd.equals(passwd)){
             System.out.println("Clear text password matched for user '" + login + "'");
             authenticated = true;
         }
@@ -146,93 +160,30 @@ public class HtpasswdMateuSecurityImpl implements MateuSecurityManager {
     }
 
     @Override
-    public UserPrincipal getUserDataFromGitHubCode(HttpServletRequest req) {
-        return new UserPrincipal() {
-            @Override
-            public String getLogin() {
-                return req.getParameter("code");
-            }
-
-            @Override
-            public List<String> getRoles() {
-                return new ArrayList<>();
-            }
-
-            @Override
-            public String getName() {
-                return "Mateu";
-            }
-
-            @Override
-            public String getEmail() {
-                return "test@test.ss";
-            }
-
-            @Override
-            public URL getPhoto() {
-                return null;
-            }
-        };
+    public UserPrincipal getUserDataFromGitHubCode(HttpServletRequest req) throws Throwable {
+        UserPrincipal p = OAuthHelper.getUserDataFromGitHubCode(req.getParameter("code"));
+        if (p == null) throw new Exception("Unable to gather user info from Github =(");
+        System.out.println("login=" + p.getLogin());
+        if (!"true".equalsIgnoreCase(System.getProperty("oauth.newusersallowed")) && !htpasswd.containsKey(p.getLogin())) throw new Exception("I'm sorry but I don't know you =(");
+        return p;
     }
 
     @Override
-    public UserPrincipal getUserDataFromGoogleCode(HttpServletRequest req) {
-        return new UserPrincipal() {
-            @Override
-            public String getLogin() {
-                return req.getParameter("code");
-            }
-
-            @Override
-            public List<String> getRoles() {
-                return new ArrayList<>();
-            }
-
-            @Override
-            public String getName() {
-                return "Mateu";
-            }
-
-            @Override
-            public String getEmail() {
-                return "test@test.ss";
-            }
-
-            @Override
-            public URL getPhoto() {
-                return null;
-            }
-        };
+    public UserPrincipal getUserDataFromGoogleCode(HttpServletRequest req) throws Throwable {
+        UserPrincipal p = OAuthHelper.getUserDataFromGoogleCode(req.getParameter("code"));
+        if (p == null) throw new Exception("Unable to gather user info from Google =(");
+        System.out.println("login=" + p.getLogin());
+        if (!"true".equalsIgnoreCase(System.getProperty("oauth.newusersallowed")) && !htpasswd.containsKey(p.getLogin())) throw new Exception("I'm sorry but I don't know you =(");
+        return p;
     }
 
     @Override
-    public UserPrincipal getUserDataFromMicrosoftCode(HttpServletRequest req) {
-        return new UserPrincipal() {
-            @Override
-            public String getLogin() {
-                return req.getParameter("code");
-            }
-
-            @Override
-            public List<String> getRoles() {
-                return new ArrayList<>();
-            }
-
-            @Override
-            public String getName() {
-                return "Mateu";
-            }
-
-            @Override
-            public String getEmail() {
-                return "test@test.ss";
-            }
-
-            @Override
-            public URL getPhoto() {
-                return null;
-            }
-        };
+    public UserPrincipal getUserDataFromMicrosoftCode(HttpServletRequest req) throws Throwable {
+        UserPrincipal p = OAuthHelper.getUserDataFromMicrosoftCode(req.getParameter("code"));
+        if (p == null) throw new Exception("Unable to gather user info from Microsoft =(");
+        System.out.println("login=" + p.getLogin());
+        if (!"true".equalsIgnoreCase(System.getProperty("oauth.newusersallowed")) && !htpasswd.containsKey(p.getLogin())) throw new Exception("I'm sorry but I don't know you =(");
+        return p;
     }
 
     @Override
@@ -277,7 +228,7 @@ public class HtpasswdMateuSecurityImpl implements MateuSecurityManager {
 
     @Override
     public boolean isLoginSupported() {
-        return !"false".equalsIgnoreCase(System.getProperty("oauthonly"));
+        return !"true".equalsIgnoreCase(System.getProperty("oauthonly"));
     }
 
 

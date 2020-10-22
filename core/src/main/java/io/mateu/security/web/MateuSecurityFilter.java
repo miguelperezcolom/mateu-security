@@ -21,6 +21,7 @@ import java.util.Map;
 public class MateuSecurityFilter implements Filter {
 
     String byeFreemark = "Not initialized. Surely /security/bye.html was not found in the classpath.";
+    String errorFreemark = "Not initialized. Surely /security/error.html was not found in the classpath.";
     String loginFormFreemark = "Not initialized. Surely /security/loginForm.html was not found in the classpath.";
     String recoverPasswordFormFreemark = "Not initialized. Surely /security/recoverPasswordForm.html was not found in the classpath.";
     String initializationErrorMsg;
@@ -36,6 +37,7 @@ public class MateuSecurityFilter implements Filter {
             securityManager = Helper.getImpl(MateuSecurityManager.class);
             loginFormFreemark = Helper.leerFichero(getClass().getResourceAsStream("/security/loginForm.html"));
             byeFreemark = Helper.leerFichero(getClass().getResourceAsStream("/security/bye.html"));
+            errorFreemark = Helper.leerFichero(getClass().getResourceAsStream("/security/error.html"));
             recoverPasswordFormFreemark = Helper.leerFichero(getClass().getResourceAsStream("/security/recoverPasswordForm.html"));
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,10 +109,23 @@ public class MateuSecurityFilter implements Filter {
 
         } catch (Throwable e) {
             e.printStackTrace();
+            showError(req, res, e.getMessage());
         }
 
     }
 
+    private void showError(HttpServletRequest req, HttpServletResponse res, String msg) throws IOException {
+        String html = null;
+        try {
+            Map<String, Object> props = getLoginFormProperties(req);
+            props.put("msg", msg);
+            html = Helper.freemark(errorFreemark, props);
+        } catch (TemplateException | IOException e) {
+            e.printStackTrace();
+            html = Helper.toString(e);
+        }
+        print(res, html);
+    }
 
 
     private void showBye(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
@@ -167,6 +182,8 @@ public class MateuSecurityFilter implements Filter {
         String callbackUrl = req.getRequestURL().toString();
         callbackUrl = callbackUrl.substring(0, callbackUrl.indexOf("private") + "private".length());
         if (!callbackUrl.endsWith("/")) callbackUrl += "/";
+
+        m.put("baseUrl", callbackUrl);
 
         m.put("welcomeMessage", securityManager.getWelcomeMessage() != null?securityManager.getWelcomeMessage():"Welcome!");
         m.put("welcomeInfo", securityManager.getWelcomeInfo() != null?securityManager.getWelcomeInfo():"Please login");

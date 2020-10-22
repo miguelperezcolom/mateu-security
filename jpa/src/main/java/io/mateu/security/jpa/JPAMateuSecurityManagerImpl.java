@@ -7,6 +7,7 @@ import io.mateu.security.MateuSecurityManager;
 import io.mateu.security.Private;
 import io.mateu.util.persistence.JPAHelper;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.net.URL;
 import java.util.List;
@@ -105,19 +106,35 @@ public class JPAMateuSecurityManagerImpl implements MateuSecurityManager {
     }
 
     @Override
-    public UserPrincipal getUserDataFromGitHubCode(javax.servlet.http.HttpServletRequest req) throws Throwable {
-        return OAuthHelper.getUserDataFromGitHubCode(req.getParameter("code"));
+    public UserPrincipal getUserDataFromGitHubCode(HttpServletRequest req) throws Throwable {
+        UserPrincipal p = OAuthHelper.getUserDataFromGitHubCode(req.getParameter("code"));
+        if (p == null) throw new Exception("Unable to gather user info from Github =(");
+        System.out.println("login=" + p.getLogin());
+        User u = JPAHelper.find(User.class, p.getLogin());
+        if (!"true".equalsIgnoreCase(System.getProperty("oauth.newusersallowed")) && u == null) throw new Exception("I'm sorry but I don't know you =(");
+        return p;
     }
 
     @Override
-    public UserPrincipal getUserDataFromGoogleCode(javax.servlet.http.HttpServletRequest req) throws Throwable {
-        return OAuthHelper.getUserDataFromGoogleCode(req.getParameter("code"));
+    public UserPrincipal getUserDataFromGoogleCode(HttpServletRequest req) throws Throwable {
+        UserPrincipal p = OAuthHelper.getUserDataFromGoogleCode(req.getParameter("code"));
+        if (p == null) throw new Exception("Unable to gather user info from Google =(");
+        System.out.println("login=" + p.getLogin());
+        User u = JPAHelper.find(User.class, p.getLogin());
+        if (!"true".equalsIgnoreCase(System.getProperty("oauth.newusersallowed")) && u == null) throw new Exception("I'm sorry but I don't know you =(");
+        return p;
     }
 
     @Override
-    public UserPrincipal getUserDataFromMicrosoftCode(javax.servlet.http.HttpServletRequest req) throws Throwable {
-        return OAuthHelper.getUserDataFromMicrosoftCode(req.getParameter("code"));
+    public UserPrincipal getUserDataFromMicrosoftCode(HttpServletRequest req) throws Throwable {
+        UserPrincipal p = OAuthHelper.getUserDataFromMicrosoftCode(req.getParameter("code"));
+        if (p == null) throw new Exception("Unable to gather user info from Microsoft =(");
+        System.out.println("login=" + p.getLogin());
+        User u = JPAHelper.find(User.class, p.getLogin());
+        if (!"true".equalsIgnoreCase(System.getProperty("oauth.newusersallowed")) && u == null) throw new Exception("I'm sorry but I don't know you =(");
+        return p;
     }
+
 
     @Override
     public String getWelcomeMessage() {
@@ -161,7 +178,7 @@ public class JPAMateuSecurityManagerImpl implements MateuSecurityManager {
 
     @Override
     public boolean isLoginSupported() {
-        return !"false".equalsIgnoreCase(System.getProperty("oauthonly"));
+        return !"true".equalsIgnoreCase(System.getProperty("oauthonly"));
     }
 
 
