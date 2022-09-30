@@ -7,9 +7,14 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="tester" />
         <module name="core" />
         <module name="htpasswd" />
+        <module name="security-fake" />
+        <module name="security-core" />
+        <module name="security-jpa" />
+        <module name="security-api" />
+        <module name="tester" />
+        <module name="security-htpasswd" />
         <module name="fake" />
         <module name="jpa" />
         <module name="api" />
@@ -27,6 +32,11 @@
       <module name="htpasswd" options="-parameters" />
       <module name="httpBasic" options="-parameters" />
       <module name="jpa" options="-parameters" />
+      <module name="security-api" options="-parameters" />
+      <module name="security-core" options="-parameters" />
+      <module name="security-fake" options="-parameters" />
+      <module name="security-htpasswd" options="-parameters" />
+      <module name="security-jpa" options="-parameters" />
       <module name="tester" options="-parameters" />
     </option>
   </component>

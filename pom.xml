@@ -12,7 +12,9 @@
     <module>api</module>
     <module>core</module>
     <module>fake</module>
+    <!--
     <module>jpa</module>
+    -->
       <module>tester</module>
     <module>htpasswd</module>
   </modules>
